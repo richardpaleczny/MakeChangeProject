@@ -71,7 +71,7 @@ public class MakeChange {
 					+ "\n*** Exact amount given, no change due. ***");
 		}
 
-		// Calculate change due if amountTendered > changeDue
+		// Calculate change due if amountTendered > purchasePrice
 		if (amountTendered > purchasePrice) {
 
 			// The non-rounded version of changeDue
