@@ -1,31 +1,3 @@
-//	In the cash register we will calculate the amount of change returned to a customer based on the purchase price and the amount tendered.
-//	We will also notify the attendant how many of each piece of currency ($20 ,$10 ,$5 ,$1, .25c, .10c, .05c, .01c) is needed to make the change for the customer.
-//	Change should be provided using the largest bill and coin denominations as possible. Denominations that are not used should not be displayed.
-//	
-//	Hint: Mod operator
-//	
-//	User Story #1
-//	The user is prompted asking for the price of the item.
-//	
-//	User Story #2
-//	The user is then prompted asking how much money was tendered by the customer.
-//	
-//	User Story #3
-//	Display an appropriate message if the customer provided too little money or the exact amount.
-//	
-//	User Story #4
-//	If the amount tendered is more than the cost of the item, display the number of bills and coins that should be given to the customer.
-//	
-//	Grading
-//	This is a graded project. You are expected to have your project completed by the start of class on Monday morning.
-//	
-//	You will be given either a pass or fail based on whether your code works given all of the following test conditions:
-//	
-//	Amount: .67, Tendered: .50, Result: Error message
-//	Amount: .67, Tendered: 1.00, Result: 1 quarter, 1 nickel, 3 pennies.
-//	Amount: .59, Tendered: 1.00, Result: 1 quarter, 1 dime, 1 nickel, 1 penny.
-//	Amount: 3.96, Tendered: 20.00, Result: 1 ten dollar bill, 1 five dollar bill, 1 one dollar bill, 4 pennies.
-//	Amount: any amount less than 20.00, Tendered: anything greater than amount: correct denominations for correct change.
 
 package com.skilldistillery.makechange;
 
@@ -40,23 +12,23 @@ public class MakeChange {
 		double purchasePrice;
 		double amountTendered;
 
+		// Run methods
 		purchasePrice = promptPrice(scanner);
 		amountTendered = promptTendered(scanner);
-
 		changeDue(purchasePrice, amountTendered, scanner);
 
 		scanner.close();
 	}
 
 	public static double promptPrice(Scanner scanner) {
-		System.out.print("What is the price of the item? \nPrice: ");
+		System.out.print("What is the price of the item? \nPrice: $");
 		double purchasePrice = scanner.nextDouble();
 
 		return purchasePrice;
 	}
 
 	public static double promptTendered(Scanner scanner) {
-		System.out.print("\nHow much to give cashier?" + "\nAmount tendered: ");
+		System.out.print("\nHow much to give cashier?" + "\nAmount tendered: $");
 		double amountTendered = scanner.nextDouble();
 
 		return amountTendered;
@@ -68,14 +40,14 @@ public class MakeChange {
 		// tendered, or quit.
 		if (amountTendered < purchasePrice) {
 			boolean condition = true;
-			
+
 			do {
-				System.out.println("\nAmount tendered: " + amountTendered + "\nPurchase price: " + purchasePrice
+				System.out.println("\nAmount tendered: $" + amountTendered + "\nPurchase price: $" + purchasePrice
 						+ "\n*** Error: The amount tendered does not cover the purchase price. ***");
 
 				System.out.println("\nWould you like to quit transaction? (N) No, (Q) Quit: ");
 				String quitOrNot = scanner.next();
-				
+
 				if (quitOrNot.equalsIgnoreCase("N")) {
 					amountTendered = promptTendered(scanner);
 					if (amountTendered < purchasePrice) {
@@ -88,21 +60,61 @@ public class MakeChange {
 				} else {
 					System.out.println("Command not recognized.");
 				}
-				
+
 			} while (condition);
 
 		}
-		
+
 		// No change is given if true
 		if (amountTendered == purchasePrice) {
-			System.out.println("\nAmount tendered: " + amountTendered + "\nPurchase price: " + purchasePrice
+			System.out.println("\nAmount tendered: $" + amountTendered + "\nPurchase price: $" + purchasePrice
 					+ "\n*** Exact amount given, no change due. ***");
 		}
-		
-		
-		double changeDue = amountTendered - purchasePrice;
-		System.out.println("testing: " + changeDue);
 
+		// Calculate change due if amountTendered > changeDue
+		if (amountTendered > purchasePrice) {
+
+			// The non-rounded version of changeDue
+			double changeDue = amountTendered - purchasePrice;
+
+			// Round the number by adding 0.05. We make changeNoDecimal an integer so that
+			// we can do modulus operations.
+			int changeNoDecimal = (int) (changeDue * 100 + 0.05);
+
+			// Change changeDue to reflect the rounded value
+			changeDue = changeNoDecimal / 100.0;
+
+			// Show the correct rounded value version of changeDue
+			System.out.println("Change due: $" + changeDue);
+
+			int[] denominationArray = { 2000, 1000, 500, 100, 25, 10, 5, 1 };
+			int[] changeArray = new int[8];
+
+			// Divide changeNoDecimal by denominationArray elements and assign that result
+			// to the changeArray which will hold how many of each element of
+			// denominationArray was able to go into changeNoDecimal - i.e. get how many of each denomination
+			// goes into changeNoDecimal.
+			for (int i = 0; i < denominationArray.length; i++) {
+				changeArray[i] = changeNoDecimal / denominationArray[i];
+				changeNoDecimal %= denominationArray[i];
+			}
+
+			displayChange(changeArray);
+		}
+
+	}
+
+	public static void displayChange(int[] changeArray) {
+		System.out.println("\n******************************");
+		System.out.println("$20 Bill: " + changeArray[0]);
+		System.out.println("$10 Bill: " + changeArray[1]);
+		System.out.println("$5 Bill: " + changeArray[2]);
+		System.out.println("$1 Bill: " + changeArray[3]);
+		System.out.println("Quarters: " + changeArray[4]);
+		System.out.println("Dimes: " + changeArray[5]);
+		System.out.println("Nickels: " + changeArray[6]);
+		System.out.println("Pennies: " + changeArray[7]);
+		System.out.println("******************************");
 	}
 
 }
