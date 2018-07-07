@@ -35,24 +35,23 @@ public class MakeChange {
 	public static void main(String[] args) {
 		// Create scanner object to take input
 		Scanner scanner = new Scanner(System.in);
-		
+
 		// Declare variables
 		double purchasePrice;
 		double amountTendered;
-		
+
 		purchasePrice = promptPrice(scanner);
 		amountTendered = promptTendered(scanner);
-		
-		changeDue(purchasePrice, amountTendered);
-		
-		
+
+		changeDue(purchasePrice, amountTendered, scanner);
+
 		scanner.close();
 	}
-	
+
 	public static double promptPrice(Scanner scanner) {
 		System.out.print("What is the price of the item? \nPrice: ");
 		double purchasePrice = scanner.nextDouble();
-		
+
 		return purchasePrice;
 	}
 
@@ -62,40 +61,48 @@ public class MakeChange {
 
 		return amountTendered;
 	}
-	
-	public static void changeDue(double purchasePrice, double amountTendered) {
+
+	public static void changeDue(double purchasePrice, double amountTendered, Scanner scanner) {
+		// Check if the amount tendered is less than the purchase price. If so, prompt
+		// the user if they'd like to continue the transaction - i.e. change the amount
+		// tendered, or quit.
 		if (amountTendered < purchasePrice) {
-			System.out.println("\nAmount tendered: " + amountTendered +
-					"\nPurchase price: " + purchasePrice +
-					"\nError: The amount tendered does not cover the purchase price.");
+			boolean condition = true;
+			
+			do {
+				System.out.println("\nAmount tendered: " + amountTendered + "\nPurchase price: " + purchasePrice
+						+ "\n*** Error: The amount tendered does not cover the purchase price. ***");
+
+				System.out.println("\nWould you like to quit transaction? (N) No, (Q) Quit: ");
+				String quitOrNot = scanner.next();
+				
+				if (quitOrNot.equalsIgnoreCase("N")) {
+					amountTendered = promptTendered(scanner);
+					if (amountTendered < purchasePrice) {
+						condition = true;
+					} else if (amountTendered >= purchasePrice) {
+						condition = false;
+					}
+				} else if (quitOrNot.equalsIgnoreCase("Q")) {
+					System.exit(0);
+				} else {
+					System.out.println("Command not recognized.");
+				}
+				
+			} while (condition);
+
 		}
+		
+		// No change is given if true
+		if (amountTendered == purchasePrice) {
+			System.out.println("\nAmount tendered: " + amountTendered + "\nPurchase price: " + purchasePrice
+					+ "\n*** Exact amount given, no change due. ***");
+		}
+		
+		
 		double changeDue = amountTendered - purchasePrice;
 		System.out.println("testing: " + changeDue);
-		
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }
