@@ -45,7 +45,7 @@ public class MakeChange {
 				System.out.println("\nAmount tendered: $" + amountTendered + "\nPurchase price: $" + purchasePrice
 						+ "\n*** Error: The amount tendered does not cover the purchase price. ***");
 
-				System.out.println("\nWould you like to quit transaction? (N) No, (Q) Quit: ");
+				System.out.print("\nWould you like to quit transaction? (N) No, (Q) Quit: ");
 				String quitOrNot = scanner.next();
 
 				if (quitOrNot.equalsIgnoreCase("N")) {
@@ -92,7 +92,8 @@ public class MakeChange {
 
 			// Divide changeNoDecimal by denominationArray elements and assign that result
 			// to the changeArray which will hold how many of each element of
-			// denominationArray was able to go into changeNoDecimal - i.e. get how many of each denomination
+			// denominationArray was able to go into changeNoDecimal - i.e. get how many of
+			// each denomination
 			// goes into changeNoDecimal.
 			for (int i = 0; i < denominationArray.length; i++) {
 				changeArray[i] = changeNoDecimal / denominationArray[i];
@@ -101,20 +102,21 @@ public class MakeChange {
 
 			displayChange(changeArray);
 		}
-
+		
 	}
 
 	public static void displayChange(int[] changeArray) {
+
+		String[] printOut = { "$20 Bill: ", "$10 Bill: ", "$5 Bill: ",
+				    "$1 Bill: ", "Quarters: ", "Dimes: ", "Nickels: ",
+				    "Pennies: " };
+
 		System.out.println("\n******************************");
-		System.out.println("$20 Bill: " + changeArray[0]);
-		System.out.println("$10 Bill: " + changeArray[1]);
-		System.out.println("$5 Bill: " + changeArray[2]);
-		System.out.println("$1 Bill: " + changeArray[3]);
-		System.out.println("Quarters: " + changeArray[4]);
-		System.out.println("Dimes: " + changeArray[5]);
-		System.out.println("Nickels: " + changeArray[6]);
-		System.out.println("Pennies: " + changeArray[7]);
+		for (int i = 0; i < printOut.length; i++) {
+			System.out.println(printOut[i] + changeArray[i]);
+		}
 		System.out.println("******************************");
+
 	}
 
 }
