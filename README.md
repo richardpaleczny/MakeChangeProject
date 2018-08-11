@@ -13,5 +13,3 @@ This project was assigned after Week 1 of Skill Distillery's Java Coding School.
 * Java
 * Java operators, especially %
 * vi, a little
-
-### Lessons Learned
